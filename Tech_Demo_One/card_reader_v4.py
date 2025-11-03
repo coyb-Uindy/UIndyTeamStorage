@@ -7,7 +7,7 @@ import RPi.GPIO as GPIO
 import time
 
 # -------------------- CONFIG --------------------
-PIN_NUMBER = 12  # Change to your GPIO pin number
+PIN_NUMBER = 26  # Change to your GPIO pin number
 CSV_FILENAME = "card_swipes.csv"
 # ------------------------------------------------
 
