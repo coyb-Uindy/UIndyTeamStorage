@@ -6,22 +6,23 @@ from pathlib import Path
 card_data = ""
 
 # Path to the log file
-LOG_FILE = Path("Tech_Demo_One/card_swipes.csv")
+LOG_FILE_PATH = Path("Tech_Demo_One/card_swipes.csv")
+LOG_FILE = "Tech_Demo_One/card_swipes.csv"
 
 # Verify a log file exists
-if LOG_FILE.exists():
+if LOG_FILE_PATH.exists():
 
     # Notify of existance
-    print(f"File '{LOG_FILE}' exists!")
+    print(f"File {LOG_FILE} exists!")
 
 else:
 
     # Notify of nonexistance and file creation
-    print(f"File '{LOG_FILE}' does not exist, creating now.")
+    print(f"File {LOG_FILE} does not exist, creating now.")
 
     # Name columns and create file
     card_swipe_df = pd.DataFrame(columns=["timestamp", "card id"])
-    pd.to_csv(card_swipe_df)
+    card_swipe_df.to_csv(LOG_FILE, index=False)
 
 # Read .csv log file
 card_swipe_df = pd.read_csv(LOG_FILE)
