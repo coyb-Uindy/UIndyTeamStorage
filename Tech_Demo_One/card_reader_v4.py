@@ -8,12 +8,15 @@ import time
 
 # -------------------- CONFIG --------------------
 PIN_NUMBER = 26  # Change to your GPIO pin number
+GREEN_PIN = 13
+RED_PIN = 19
 CSV_FILENAME = "card_swipes.csv"
 # ------------------------------------------------
 
 # --- Get path to this script’s folder (Tech_Demo_One) ---
 SCRIPT_DIR = Path(__file__).resolve().parent
 LOG_FILE_PATH = SCRIPT_DIR / CSV_FILENAME
+
 
 print(f"[INFO] Script directory: {SCRIPT_DIR}")
 print(f"[INFO] CSV file path: {LOG_FILE_PATH}")
@@ -31,7 +34,11 @@ card_swipe_df = pd.read_csv(LOG_FILE_PATH)
 # --- GPIO setup ---
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(PIN_NUMBER, GPIO.OUT)
+GPIO.setup(RED_PIN, GPIO.OUT)
+GPIO.setup(GREEN_PIN, GPIO.OUT)
 GPIO.output(PIN_NUMBER, GPIO.LOW)
+GPIO.output(RED_PIN, GPIO.HIGH)
+GPIO.output(GREEN_PIN, GPIO.LOW)
 
 card_data = ""
 accepting_input = True  # Prevent input during 10-sec lockout
@@ -41,9 +48,13 @@ def activate_pin_for_10s_blocking():
     global accepting_input
     accepting_input = False
     GPIO.output(PIN_NUMBER, GPIO.HIGH)
+    GPIO.output(RED_PIN, GPIO.LOW)
+    GPIO.output(GREEN_PIN, GPIO.HIGH)
     print(f"[GPIO] Pin {PIN_NUMBER} HIGH — locked for 10 seconds...")
     time.sleep(10)
     GPIO.output(PIN_NUMBER, GPIO.LOW)
+    GPIO.output(RED_PIN, GPIO.HIGH)
+    GPIO.output(GREEN_PIN, GPIO.LOW)
     print(f"[GPIO] Pin {PIN_NUMBER} LOW — unlocked.")
     accepting_input = True
 
@@ -87,6 +98,7 @@ def on_press(key):
             print("[INFO] Exiting...")
             GPIO.cleanup()
             return False
+            
 
 print("Swipe your card (Press ESC to exit)...")
 with keyboard.Listener(on_press=on_press) as listener:
